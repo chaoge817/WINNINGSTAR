@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="theme-color" content="#f5f5f7">
+    <title>WINNINGSTAR Experience</title>
+    <style>
+        /* =========================================
+           Apple Design System Core
+           ========================================= */
+        :root {
+            --bg-color: #f5f5f7; /* Apple 经典的浅灰背景 */
+            --card-bg: #ffffff;
+            --text-primary: #1d1d1f; /* 深炭灰，非纯黑 */
+            --text-secondary: #86868b;
+            --accent-color: #0071e3; /* Apple Blue */
+            --radius-card: 24px; /* 大圆角 */
+            --radius-element: 14px; /* 元素圆角 */
+            /* 细腻、扩散的阴影 */
+            --shadow-depth: 0 8px 30px rgba(0, 0, 0, 0.08);
+            --transition-smooth: all 0.3s cubic-bezier(0.25, 0.1, 0.25, 1.0);
+        }
+
+        /* 使用系统原生字体栈，实现最原生的体验 */
+        body {
+            margin: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Helvetica Neue", Helvetica, Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+            -webkit-font-smoothing: antialiased; /* iOS 字体抗锯齿优化 */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        /* 主内容卡片：悬浮感 */
+        .main-card {
+            background: var(--card-bg);
+            width: 100%;
+            max-width: 420px; /* 限制最大宽度，适合竖屏内容 */
+            border-radius: var(--radius-card);
+            box-shadow: var(--shadow-depth);
+            padding: 40px 30px;
+            text-align: center;
+            /* 适配刘海屏安全区域 */
+            margin-top: env(safe-area-inset-top);
+            margin-bottom: env(safe-area-inset-bottom);
+        }
+
+        /* 标题样式 */
+        h1.title {
+            font-weight: 700;
+            font-size: 28px;
+            letter-spacing: -0.01em;
+            margin: 0 0 10px 0;
+        }
+
+        p.subtitle {
+            font-size: 16px;
+            color: var(--text-secondary);
+            margin: 0 0 35px 0;
+            font-weight: 400;
+        }
+
+        /* =========================================
+           自定义语言选择器 (Apple Style Select)
+           ========================================= */
+        .select-container {
+            position: relative;
+            margin-bottom: 30px;
+            text-align: left;
+        }
+        
+        /* RTL 模式下文本右对齐 */
+        [dir="rtl"] .select-container {
+            text-align: right;
+        }
+
+        .select-label {
+            display: block;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            padding-left: 4px;
+        }
+        [dir="rtl"] .select-label { padding-left: 0; padding-right: 4px; }
+
+        /* 自定义 Select 的外观包裹器 */
+        .custom-select-wrapper {
+            position: relative;
+            display: flex;
+            align-items: center;
+            background-color: #f2f2f7; /* iOS 输入框背景色 */
+            border-radius: var(--radius-element);
+            padding: 0 16px;
+            height: 50px;
+            transition: var(--transition-smooth);
+        }
+        
+        .custom-select-wrapper:hover { background-color: #e5e5ea; }
+
+        /* 真正的 Select 标签，透明覆盖在上方 */
+        .custom-select-wrapper select {
+            appearance: none;
+            -webkit-appearance: none;
+            border: none;
+            background: transparent;
+            font-size: 17px;
+            font-weight: 500;
+            color: var(--text-primary);
+            width: 100%;
+            height: 100%;
+            cursor: pointer;
+            outline: none;
+            font-family: inherit;
+            z-index: 2;
+        }
+
+        /* 自定义箭头图标 SVG */
+        .select-arrow {
+            position: absolute;
+            right: 16px;
+            pointer-events: none;
+            color: var(--text-secondary);
+            z-index: 1;
+            transition: var(--transition-smooth);
+        }
+        
+        /* RTL 适配：箭头在左侧 */
+        [dir="rtl"] .select-arrow { right: auto; left: 16px; }
+
+        /* =========================================
+           竖屏视频容器 (9:16 Aspect Ratio)
+           ========================================= */
+        .video-container {
+            position: relative;
+            width: 100%;
+            /* 关键：强制 9/16 纵横比 */
+            aspect-ratio: 9 / 16;
+            background: #000;
+            border-radius: var(--radius-element);
+            overflow: hidden; /* 确保圆角剪裁视频 */
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover; /* 确保视频填满容器，可能会裁剪边缘 */
+            display: block;
+        }
+
+    </style>
+</head>
+<body>
+
+    <main class="main-card">
+        <h1 class="title">WINNINGSTAR</h1>
+        <p class="subtitle" id="langSubtitle">Select Language / 选择语言</p>
+
+        <div class="select-container">
+            <label for="languageSelect" class="select-label">Language / 语言</label>
+            <div class="custom-select-wrapper">
+                <select id="languageSelect">
+                    <option value="en">English</option>
+                    <option value="fr">Français (French)</option>
+                    <option value="es">Español (Spanish)</option>
+                    <option value="ru">Русский (Russian)</option>
+                    <option value="ar">العربية (Arabic)</option>
+                </select>
+                <svg class="select-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+            </div>
+        </div>
+
+        <div class="video-container">
+            <video id="videoPlayer" controls playsinline webkit-playsinline preload="metadata" poster="https://placehold.co/1080x1920/1d1d1f/ffffff?text=WINNINGSTAR+Loading">
+                Your browser does not support HTML5 video.
+            </video>
+        </div>
+    </main>
+
+<script>
+    // ==========================================
+    // 1. 配置区域：请在此处替换您的真实视频链接
+    // ==========================================
+    // 重要：链接必须是 .mp4 直链 (Direct Link)。
+    // 为了演示，这里使用了临时的公共测试视频（横屏的，但会被强制裁剪为竖屏显示）。
+    const videoData = {
+        'en': {
+            // 替换为您的英语版 9:16 视频链接
+            src: 'https://winningstar-1395721897.cos.ap-shanghai.myqcloud.com/English.mp4', 
+            subtitle: 'Select your preferred language.'
+        },
+        'fr': {
+             // 替换为您的法语版 9:16 视频链接
+            src: 'https://winningstar-1395721897.cos.ap-shanghai.myqcloud.com/French.mp4',
+            subtitle: 'Sélectionnez votre langue préférée.'
+        },
+        'es': {
+             // 替换为您的西班牙语版 9:16 视频链接
+            src: 'https://winningstar-1395721897.cos.ap-shanghai.myqcloud.com/Spanish%20.mp4',
+            subtitle: 'Selecciona tu idioma preferido.'
+        },
+        'ru': {
+             // 替换为您的俄语版 9:16 视频链接
+            src: 'https://winningstar-1395721897.cos.ap-shanghai.myqcloud.com/Russian.mp4',
+            subtitle: 'Выберите предпочитаемый язык.'
+        },
+        'ar': {
+             // 替换为您的阿拉伯语版 9:16 视频链接
+            src: 'https://winningstar-1395721897.cos.ap-shanghai.myqcloud.com/Arabic.mp4',
+            subtitle: 'اختر لغتك المفضلة.',
+            rtl: true // 标记为 RTL 语言
+        }
+    };
+
+    // ==========================================
+    // 2. 程序逻辑
+    // ==========================================
+    const player = document.getElementById('videoPlayer');
+    const select = document.getElementById('languageSelect');
+    const subtitleText = document.getElementById('langSubtitle');
+    const htmlTag = document.documentElement;
+
+    // 切换语言的核心函数
+    function switchLanguage(langCode) {
+        const data = videoData[langCode] || videoData['en']; // 默认回退到英语
+
+        // 1. 处理 RTL (阿拉伯语布局方向)
+        if (data.rtl) {
+            htmlTag.setAttribute('dir', 'rtl');
+            htmlTag.setAttribute('lang', 'ar');
+        } else {
+            htmlTag.setAttribute('dir', 'ltr');
+            htmlTag.setAttribute('lang', langCode);
+        }
+
+        // 2. 更新副标题文字
+        subtitleText.textContent = data.subtitle;
+
+        // 3. 切换视频源
+        // 记录当前播放状态，以便切换后决定是否自动续播
+        const isPlaying = !player.paused && !player.ended && player.readyState > 2;
+        
+        player.src = data.src;
+        // 加载新视频源
+        player.load();
+
+        // 可选：切换语言后尝试自动播放（移动端浏览器可能会拦截非静音的自动播放）
+        // if (isPlaying) {
+        //    player.play().catch(e => console.log('Auto-play blocked usually okay on mobile'));
+        // }
+    }
+
+    // 自动检测用户浏览器语言
+    function detectUserLanguage() {
+        const userLang = navigator.language || navigator.userLanguage;
+        const shortLang = userLang.split('-')[0].toLowerCase();
+        if (videoData.hasOwnProperty(shortLang)) {
+            return shortLang;
+        }
+        return 'en'; // 检测不到则默认英语
+    }
+
+    // 初始化
+    function init() {
+        const initialLang = detectUserLanguage();
+        select.value = initialLang;
+        switchLanguage(initialLang);
+        
+        // 监听下拉框变化事件
+        select.addEventListener('change', (e) => {
+            switchLanguage(e.target.value);
+        });
+    }
+
+    // 启动
+    init();
+
+</script>
+</body>
+</html>
